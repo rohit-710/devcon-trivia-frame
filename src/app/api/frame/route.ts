@@ -56,6 +56,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
+  // Check if the answer is incorrect
   if (id > 1 && buttonId !== correctAnswers[id - 2]) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
@@ -66,11 +67,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame:button:1" content="Try again"} />
     <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${
       id - 1
-    }" />
+    }&action=showQuestion" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
 
+  // Check if this is the final frame
   if (id === 9) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>You won</title>
@@ -80,8 +82,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/end" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
-  } else {
-    return new NextResponse(`<!DOCTYPE html><html><head>
+  }
+
+  // Display the next question
+  return new NextResponse(`<!DOCTYPE html><html><head>
     <title>This is frame ${id}</title>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png" />
@@ -90,9 +94,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame:button:3" content="${answerOptions[id - 1][2]}" />
     <meta property="fc:frame:button:4" content="${answerOptions[id - 1][3]}" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
+    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}&action=showQuestion" />
   </head></html>`);
-  }
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
