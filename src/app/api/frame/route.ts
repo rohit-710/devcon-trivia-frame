@@ -68,9 +68,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/end.png" />
     <meta property="fc:frame:button:1" content="Follow Rohit"} />
-    <meta property="fc:frame:link" target="https://warpcast.com/rohit7101" />
-    <meta property="fc:frame:button:2" content="Follow Rose"} />
-    <meta property="fc:frame:link" target="https://warpcast.com/rosee" />
+    <meta property="fc:frame:button:1:action" content="link"} />
+    <meta property="fc:frame:button:1:target" content="https://warpcast.com/rohit7101" />
+     <meta property="fc:frame:button:2" content="Follow Rohit"} />
+    <meta property="fc:frame:button:2:action" content="link"} />
+    <meta property="fc:frame:button:2:target" content="https://warpcast.com/rosee" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   } else {
