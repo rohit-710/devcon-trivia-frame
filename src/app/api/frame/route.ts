@@ -10,9 +10,40 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const buttonId = data.untrustedData.buttonIndex;
 
   const answerOptions = [
-    ["2014", "2015", "2016"],
-    ["Berlin", "London", "Shanghai"],
-    ["Ether Bunny", "Deva the Unicorn", "CryptoKitty"],
+    ["2014", "2015", "2016", "2017"],
+    ["Berlin", "London", "Shanghai", "Cancun"],
+    [
+      "Discuss Ethereum ETF",
+      "Scaling Ethereum",
+      "Empower Ethereum Builders",
+      "Say gm IRL",
+    ],
+    [
+      "Ether Bunny",
+      "Deva the Unicorn",
+      "Shanghai",
+      "CryptoKitty",
+      "Casper the Friendly Validator",
+    ],
+    [
+      "Devcon 3 in Cancun",
+      "Devcon 4 in Prague",
+      "Devcon 5 in Osaka",
+      "Devcon 6 in Bogotá",
+    ],
+    [
+      "The future of Ethereum",
+      "Vitalik's meme review",
+      "Ethereum for dummies",
+      "Ethereum in 30 Minutes",
+    ],
+    [
+      "Developer Infrastructure",
+      "Opportunity & Global Impact",
+      "Layer 2s",
+      "Staking and Validator Experience",
+    ],
+    ["Crowdsourcing", "Dogfooding", "Open Sourcing", "Beta Testing"],
   ];
 
   const correctAnswers = [0, 1, 1];
@@ -21,14 +52,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/wrong.png" />
+    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/wrong${id}.png" />
     <meta property="fc:frame:button:1" content="Play again"} />
     <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/frame?id=1" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
 
-  if (id === 4) {
+  if (id === 9) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>You won</title>
     <meta property="fc:frame" content="vNext" />
@@ -47,6 +78,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame:button:1" content=${answerOptions[id - 1][0]} />
     <meta property="fc:frame:button:2" content=${answerOptions[id - 1][1]} />
     <meta property="fc:frame:button:3" content=${answerOptions[id - 1][2]} />
+    <meta property="fc:frame:button:3" content=${answerOptions[id - 1][3]} />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
     <meta property="fc:frame:post_url" content="${
       process.env.NEXT_PUBLIC_URL
