@@ -1,4 +1,3 @@
-import next from "next";
 import { NextRequest, NextResponse } from "next/server";
 const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
 
@@ -52,13 +51,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/wrong${id - 1}.png" />
-    <meta property="fc:frame:button:1" content="Play again"} />
-    <meta property="fc:frame:post_url" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/api/frame?id=${nextId - 2}" />
+    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong${
+      id - 1
+    }.png" />
+    <meta property="fc:frame:button:1" content="Try again"} />
+    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${
+      id - 1
+    }" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
@@ -67,31 +66,27 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>You won</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/end.png" />
+    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/end.png" />
     <meta property="fc:frame:button:1" content="Play again"} />
-    <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/end" />
+    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/end" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   } else {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>This is frame ${id}</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/${id}.png" />
-    <meta property="fc:frame:button:1" content=${answerOptions[id - 1][0]} />
-    <meta property="fc:frame:button:2" content=${answerOptions[id - 1][1]} />
-    <meta property="fc:frame:button:3" content=${answerOptions[id - 1][2]} />
-    <meta property="fc:frame:button:4" content=${answerOptions[id - 1][3]} />
+    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png" />
+    <meta property="fc:frame:button:1" content="${answerOptions[id - 1][0]}" />
+    <meta property="fc:frame:button:2" content="${answerOptions[id - 1][1]}" />
+    <meta property="fc:frame:button:3" content="${answerOptions[id - 1][2]}" />
+    <meta property="fc:frame:button:4" content="${answerOptions[id - 1][3]}" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    <meta property="fc:frame:post_url" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/api/frame?id=${nextId}" />
+    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
   </head></html>`);
   }
 }
 
-export async function POST(req: NextRequest): Promise<Response> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   return getResponse(req);
 }
 
