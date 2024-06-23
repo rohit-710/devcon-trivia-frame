@@ -54,7 +54,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/wrong${id}.png" />
     <meta property="fc:frame:button:1" content="Play again"} />
-    <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/frame?id=1" />
+    <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/frame?${id}" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
