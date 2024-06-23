@@ -4,19 +4,10 @@ const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const searchParams = req.nextUrl.searchParams;
   const idString: any = searchParams.get("id");
-  const id = parseInt(idString) || 1; // Default to 1 if idString is not a number
+  const id = parseInt(idString);
   const nextId = id + 1;
-
-  let data: any;
-  try {
-    data = await req.json();
-  } catch (error) {
-    data = {}; // Default data if parsing fails
-  }
-  const buttonId =
-    data?.untrustedData?.buttonIndex !== undefined
-      ? parseInt(data.untrustedData.buttonIndex)
-      : -1;
+  const data = await req.json();
+  const buttonId = data.untrustedData.buttonIndex;
 
   const answerOptions = [
     ["2014", "2015", "2016", "2017"],
@@ -56,45 +47,50 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
-  // Check if the answer is incorrect
-  if (id >= 1 && buttonId !== correctAnswers[id - 1]) {
+  if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong${id}.png" />
-    <meta property="fc:frame:button:1" content="Try again"} />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${id}&action=showQuestion" />
+    <meta property="fc:frame:image" content="${
+      process.env.NEXT_PUBLIC_URL
+    }/wrong${id - 1}.png" />
+    <meta property="fc:frame:button:1" content="Play again"} />
+    <meta property="fc:frame:post_url" content="${
+      process.env.NEXT_PUBLIC_URL
+    }/api/frame?id=1" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
 
-  // Check if this is the final frame
   if (id === 9) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>You won</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/end.png" />
+    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/end.png" />
     <meta property="fc:frame:button:1" content="Play again"} />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/end" />
+    <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/end" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
-  }
-
-  // Display the next question
-  return new NextResponse(`<!DOCTYPE html><html><head>
+  } else {
+    return new NextResponse(`<!DOCTYPE html><html><head>
     <title>This is frame ${id}</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png" />
-    <meta property="fc:frame:button:1" content="${answerOptions[id - 1][0]}" />
-    <meta property="fc:frame:button:2" content="${answerOptions[id - 1][1]}" />
-    <meta property="fc:frame:button:3" content="${answerOptions[id - 1][2]}" />
-    <meta property="fc:frame:button:4" content="${answerOptions[id - 1][3]}" />
+    <meta property="fc:frame:image" content="${
+      process.env.NEXT_PUBLIC_URL
+    }/${id}.png" />
+    <meta property="fc:frame:button:1" content=${answerOptions[id - 1][0]} />
+    <meta property="fc:frame:button:2" content=${answerOptions[id - 1][1]} />
+    <meta property="fc:frame:button:3" content=${answerOptions[id - 1][2]} />
+    <meta property="fc:frame:button:4" content=${answerOptions[id - 1][3]} />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}&action=showQuestion" />
+    <meta property="fc:frame:post_url" content="${
+      process.env.NEXT_PUBLIC_URL
+    }/api/frame?id=${nextId}" />
   </head></html>`);
+  }
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);
 }
 
