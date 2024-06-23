@@ -18,7 +18,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const correctAnswers = [0, 1, 1];
 
   const headers = new Headers({
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": "application/json;",
   });
 
   // Check if the answer is incorrect
