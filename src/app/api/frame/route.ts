@@ -18,27 +18,24 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const correctAnswers = [0, 1, 1];
 
   const headers = new Headers({
-    "Content-Type": "text/html; charset=utf-8",
+    "Content-Type": "application/json; charset=utf-8",
   });
+
+  const responseJson = {
+    fcFrame: "vNext",
+    fcImageAspectRatio: "1.91:1",
+  };
 
   // Check if the answer is incorrect
   if (id > 0 && buttonId - 1 !== correctAnswers[id - 1]) {
     return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>Wrong! Try the next question.</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong.png" />
-      <meta property="fc:frame:button:1" content="Next question"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      <body>
-      <h1>Wrong! Try the next question.</h1>
-      </body>
-      </html>`,
+      JSON.stringify({
+        ...responseJson,
+        title: "Wrong! Try the next question.",
+        fcFrameImage: `${NEXT_PUBLIC_URL}/wrong.png`,
+        fcFrameButton1: "Next question",
+        fcFramePostUrl: `${NEXT_PUBLIC_URL}/api/frame?id=${nextId}`,
+      }),
       { headers }
     );
   }
@@ -46,21 +43,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   // Check if the answer is correct and not the final frame
   if (id > 0 && buttonId - 1 === correctAnswers[id - 1] && id < 4) {
     return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>Correct! Move to the next question.</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/correct.png" />
-      <meta property="fc:frame:button:1" content="Next question"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      <body>
-      <h1>Correct! Move to the next question.</h1>
-      </body>
-      </html>`,
+      JSON.stringify({
+        ...responseJson,
+        title: "Correct! Move to the next question.",
+        fcFrameImage: `${NEXT_PUBLIC_URL}/correct.png`,
+        fcFrameButton1: "Next question",
+        fcFramePostUrl: `${NEXT_PUBLIC_URL}/api/frame?id=${nextId}`,
+      }),
       { headers }
     );
   }
@@ -68,21 +57,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   // Check if this is the final frame
   if (id === 4) {
     return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>The End</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/end.png" />
-      <meta property="fc:frame:button:1" content="Play again"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/end" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      <body>
-      <h1>The End</h1>
-      </body>
-      </html>`,
+      JSON.stringify({
+        ...responseJson,
+        title: "The End",
+        fcFrameImage: `${NEXT_PUBLIC_URL}/end.png`,
+        fcFrameButton1: "Play again",
+        fcFramePostUrl: `${NEXT_PUBLIC_URL}/api/end`,
+      }),
       { headers }
     );
   }
@@ -90,44 +71,28 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   // Default case for initial frame or if id is out of expected range
   if (id >= 0 && id < 4) {
     return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>This is frame ${id}</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png"/>
-      <meta property="fc:frame:button:1" content="${answerOptions[id][0]}" />
-      <meta property="fc:frame:button:2" content="${answerOptions[id][1]}" />
-      <meta property="fc:frame:button:3" content="${answerOptions[id][2]}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      </head>
-      <body>
-      <h1>This is frame ${id}</h1>
-      </body>
-      </html>`,
+      JSON.stringify({
+        ...responseJson,
+        title: `This is frame ${id}`,
+        fcFrameImage: `${NEXT_PUBLIC_URL}/${id}.png`,
+        fcFrameButton1: answerOptions[id][0],
+        fcFrameButton2: answerOptions[id][1],
+        fcFrameButton3: answerOptions[id][2],
+        fcFramePostUrl: `${NEXT_PUBLIC_URL}/api/frame?id=${nextId}`,
+      }),
       { headers }
     );
   }
 
   // Return a default response in case of unexpected input
   return new NextResponse(
-    `
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <title>Error</title>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/error.png" />
-    <meta property="fc:frame:button:1" content="Start again"} />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=0" />
-    <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    </head>
-    <body>
-    <h1>Error</h1>
-    </body>
-    </html>`,
+    JSON.stringify({
+      ...responseJson,
+      title: "Error",
+      fcFrameImage: `${NEXT_PUBLIC_URL}/error.png`,
+      fcFrameButton1: "Start again",
+      fcFramePostUrl: `${NEXT_PUBLIC_URL}/api/frame?id=0`,
+    }),
     { headers }
   );
 }
