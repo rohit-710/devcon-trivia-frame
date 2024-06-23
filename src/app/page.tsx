@@ -8,7 +8,7 @@ const frameMetadata = getFrameMetadata({
     {
       label: "Start Quiz",
       action: "post",
-      target: `${NEXT_PUBLIC_URL}/api/frame?id=0`,
+      target: `${NEXT_PUBLIC_URL}/api/frame?id=1`,
     },
     {
       label: "Devcon Website",
