@@ -78,7 +78,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta property="fc:frame:button:1" content=${answerOptions[id - 1][0]} />
     <meta property="fc:frame:button:2" content=${answerOptions[id - 1][1]} />
     <meta property="fc:frame:button:3" content=${answerOptions[id - 1][2]} />
-    <meta property="fc:frame:button:3" content=${answerOptions[id - 1][3]} />
+    <meta property="fc:frame:button:4" content=${answerOptions[id - 1][3]} />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
     <meta property="fc:frame:post_url" content="${
       process.env.NEXT_PUBLIC_URL
