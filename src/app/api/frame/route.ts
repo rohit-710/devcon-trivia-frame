@@ -4,10 +4,15 @@ const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const searchParams = req.nextUrl.searchParams;
   const idString: any = searchParams.get("id");
-  const id = parseInt(idString);
+  const id = parseInt(idString) || 1; // Default to 1 if idString is not a number
   const nextId = id + 1;
-  const data = await req.json();
-  const buttonId = data.untrustedData.buttonIndex;
+  let data = {};
+  try {
+    data = await req.json();
+  } catch (error) {
+    data = { untrustedData: { buttonIndex: 0 } }; // Default data if parsing fails
+  }
+  const buttonId = parseInt(data.untrustedData.buttonIndex); // Ensure buttonId is an integer
 
   const answerOptions = [
     ["2014", "2015", "2016", "2017"],
@@ -47,7 +52,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
-  if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
+  if (id > 1 && buttonId !== correctAnswers[id - 2]) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
     <meta property="fc:frame" content="vNext" />
