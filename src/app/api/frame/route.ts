@@ -7,7 +7,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const id = parseInt(idString);
   const nextId = id + 1;
   const data = await req.json();
-  const buttonId = data.untrustedData?.buttonIndex;
+  const buttonId = data.untrustedData.buttonIndex;
 
   const answerOptions = [
     ["2014", "2015", "2016"],
@@ -17,125 +17,78 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   const correctAnswers = [0, 1, 1];
 
-  const headers = new Headers({
-    "Content-Type": "application/json",
-  });
-
-  // Initial frame handling
-  if (id === 0) {
-    return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>This is frame ${id}</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/0.png"/>
-      <meta property="fc:frame:button:1" content="${answerOptions[id][0]}" />
-      <meta property="fc:frame:button:2" content="${answerOptions[id][1]}" />
-      <meta property="fc:frame:button:3" content="${answerOptions[id][2]}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      </head>
-      </html>`,
-      { headers }
-    );
+  // Check if the answer is incorrect
+  if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
+    return new NextResponse(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title>Wrong! Try the next question.</title>
+        <meta property="fc:frame" content="vNext" />
+        <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong.png" />
+        <meta property="fc:frame:button:1" content="Next question"} />
+        <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_BASE_URL}/api/frame?id=${nextId}" />
+        <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
+        </head>
+        </html>`);
   }
 
-  // Correct answer handling
-  if (id > 0 && buttonId - 1 === correctAnswers[id - 1] && id < 4) {
-    return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>Correct! Move to the next question.</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/correct.png" />
-      <meta property="fc:frame:button:1" content="Next question"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      </html>`,
-      { headers }
-    );
+  // Check if the answer is correct and not the final frame
+  if (id > 1 && buttonId - 1 === correctAnswers[id - 2] && id < 4) {
+    return new NextResponse(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title>Correct! Move to the next question.</title>
+        <meta property="fc:frame" content="vNext" />
+        <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/correct.png" />
+        <meta property="fc:frame:button:1" content="Next question"} />
+        <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_BASE_URL}/api/frame?id=${nextId}" />
+        <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
+        </head>
+        </html>`);
   }
 
-  // Incorrect answer handling
-  if (id > 0 && buttonId - 1 !== correctAnswers[id - 1] && id < 4) {
-    return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>Wrong! Try the next question.</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong.png" />
-      <meta property="fc:frame:button:1" content="Next question"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      </html>`,
-      { headers }
-    );
-  }
-
-  // Final frame handling
+  // Check if this is the final frame
   if (id === 4) {
-    return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>The End</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/end.png" />
-      <meta property="fc:frame:button:1" content="Play again"} />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/end" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      </head>
-      </html>`,
-      { headers }
-    );
-  }
-
-  // Default case for frames with questions
-  if (id > 0 && id < 4) {
-    return new NextResponse(
-      `
-      <!DOCTYPE html>
-      <html>
-      <head>
-      <title>This is frame ${id}</title>
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png"/>
-      <meta property="fc:frame:button:1" content="${answerOptions[id][0]}" />
-      <meta property="fc:frame:button:2" content="${answerOptions[id][1]}" />
-      <meta property="fc:frame:button:3" content="${answerOptions[id][2]}" />
-      <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-      <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
-      </head>
-      </html>`,
-      { headers }
-    );
-  }
-
-  // Return a default response in case of unexpected input
-  return new NextResponse(
-    `
+    return new NextResponse(`
     <!DOCTYPE html>
     <html>
     <head>
-    <title>Error</title>
+    <title>The End</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/error.png" />
-    <meta property="fc:frame:button:1" content="Start again"} />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=0" />
+    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/end.png" />
+    <meta property="fc:frame:button:1" content="Play again"} />
+    <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_BASE_URL}/api/end" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
     </head>
-    </html>`,
-    { headers }
-  );
+    </html>`);
+  } else {
+    return new NextResponse(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title>This is frame ${id}</title>
+        <meta property="fc:frame" content="vNext" />
+        <meta property="fc:frame:image" content="${
+          process.env.NEXT_PUBLIC_URL
+        }/${id}.png"/>
+        <meta property="fc:frame:button:1" content=${
+          answerOptions[id - 1][0]
+        } />
+        <meta property="fc:frame:button:2" content=${
+          answerOptions[id - 1][1]
+        } />
+        <meta property="fc:frame:button:3" content=${
+          answerOptions[id - 1][2]
+        } />
+        <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
+        <meta property="fc:frame:post_url" content="${
+          process.env.NEXT_PUBLIC_BASE_URL
+        }/api/frame?id=${nextId}" />
+        </head>
+        </html>`);
+  }
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
