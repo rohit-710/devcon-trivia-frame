@@ -6,13 +6,17 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const idString: any = searchParams.get("id");
   const id = parseInt(idString) || 1; // Default to 1 if idString is not a number
   const nextId = id + 1;
-  let data = {};
+
+  let data: any;
   try {
     data = await req.json();
   } catch (error) {
-    data = { untrustedData: { buttonIndex: 0 } }; // Default data if parsing fails
+    data = {}; // Default data if parsing fails
   }
-  const buttonId = parseInt(data.untrustedData.buttonIndex); // Ensure buttonId is an integer
+  const buttonId =
+    data?.untrustedData?.buttonIndex !== undefined
+      ? parseInt(data.untrustedData.buttonIndex)
+      : -1;
 
   const answerOptions = [
     ["2014", "2015", "2016", "2017"],
