@@ -21,7 +21,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     [
       "Ether Bunny",
       "Deva the Unicorn",
-      "Shanghai",
       "CryptoKitty",
       "Casper the Friendly Validator",
     ],
@@ -46,7 +45,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     ["Crowdsourcing", "Dogfooding", "Open Sourcing", "Beta Testing"],
   ];
 
-  const correctAnswers = [0, 1, 1];
+  const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
   if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
     return new NextResponse(`<!DOCTYPE html><html><head>
