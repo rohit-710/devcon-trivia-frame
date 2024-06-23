@@ -10,39 +10,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const buttonId = data.untrustedData.buttonIndex;
 
   const answerOptions = [
-    ["2014", "2015", "2016", "2017"],
-    ["Berlin", "London", "Shanghai", "Cancun"],
-    [
-      "Discuss Ethereum ETF",
-      "Scaling Ethereum",
-      "Empower Ethereum Builders",
-      "Say gm IRL",
-    ],
-    [
-      "Ether Bunny",
-      "Deva the Unicorn",
-      "CryptoKitty",
-      "Casper the Friendly Validator",
-    ],
-    [
-      "Devcon 3 in Cancun",
-      "Devcon 4 in Prague",
-      "Devcon 5 in Osaka",
-      "Devcon 6 in Bogotá",
-    ],
-    [
-      "The future of Ethereum",
-      "Vitalik's meme review",
-      "Ethereum for dummies",
-      "Ethereum in 30 Minutes",
-    ],
-    [
-      "Developer Infrastructure",
-      "Opportunity & Global Impact",
-      "Layer 2s",
-      "Staking and Validator Experience",
-    ],
-    ["Crowdsourcing", "Dogfooding", "Open Sourcing", "Beta Testing"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
+    ["A", "B", "C", "D"],
   ];
 
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
