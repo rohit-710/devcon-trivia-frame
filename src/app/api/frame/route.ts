@@ -25,12 +25,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       <head>
       <title>This is frame ${id}</title>
       <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png"/>
-
+      <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/0.png"/>
       <meta property="fc:frame:button:1" content=${answerOptions[id][0]} />
       <meta property="fc:frame:button:2" content=${answerOptions[id][1]} />
       <meta property="fc:frame:button:3" content=${answerOptions[id][2]} />
-
       <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
       <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
       </head>
@@ -94,11 +92,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       <title>This is frame ${id}</title>
       <meta property="fc:frame" content="vNext" />
       <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/${id}.png"/>
-
       <meta property="fc:frame:button:1" content=${answerOptions[id][0]} />
       <meta property="fc:frame:button:2" content=${answerOptions[id][1]} />
       <meta property="fc:frame:button:3" content=${answerOptions[id][2]} />
-
       <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
       <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
       </head>
