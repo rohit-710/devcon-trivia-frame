@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  FrameRequest,
+  getFrameMessage,
+  getFrameHtmlResponse,
+} from "@coinbase/onchainkit";
 const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
@@ -23,49 +28,76 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
   if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
-    return new NextResponse(`<!DOCTYPE html><html><head>
-    <title>Wrong! Try again.</title>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/wrong${id - 1}.png" />
-    <meta property="fc:frame:button:1" content="Play again"} />
-    <meta property="fc:frame:post_url" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/api/frame?id=1" />
-    <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-  </head></html>`);
+    return new NextResponse(
+      getFrameHtmlResponse({
+        image: {
+          src: `${process.env.NEXT_PUBLIC_URL}/wrong${id - 1}.png`,
+          aspectRatio: "1.91:1",
+        },
+        ogTitle: "Wrong! Try again.",
+        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
+        buttons: [
+          {
+            label: "Play again",
+            action: "post",
+          },
+        ],
+      })
+    );
   }
 
   if (id === 9) {
-    return new NextResponse(`<!DOCTYPE html><html><head>
-    <title>You won</title>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/end.png" />
-    <meta property="fc:frame:button:1" content="Follow Rohit"} />
-    <meta property="fc:frame:button:1:action" content="link"} />
-    <meta property="fc:frame:button:1:target" content="https://warpcast.com/rohit7101" />
-     <meta property="fc:frame:button:2" content="Follow Rose"} />
-    <meta property="fc:frame:button:2:action" content="link"} />
-    <meta property="fc:frame:button:2:target" content="https://warpcast.com/rosee" />
-    <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-  </head></html>`);
+    return new NextResponse(
+      getFrameHtmlResponse({
+        image: {
+          src: `${process.env.NEXT_PUBLIC_URL}/end.png`,
+          aspectRatio: "1.91:1",
+        },
+        ogTitle: "You won",
+        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
+        buttons: [
+          {
+            label: "Follow Rohit",
+            action: "link",
+            target: "https://warpcast.com/rohit7101",
+          },
+          {
+            label: "Follow Rose",
+            action: "link",
+            target: "https://warpcast.com/rosee",
+          },
+        ],
+      })
+    );
   } else {
-    return new NextResponse(`<!DOCTYPE html><html><head>
-    <title>This is frame ${id}</title>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/${id}.png" />
-    <meta property="fc:frame:button:1" content=${answerOptions[id - 1][0]} />
-    <meta property="fc:frame:button:2" content=${answerOptions[id - 1][1]} />
-    <meta property="fc:frame:button:3" content=${answerOptions[id - 1][2]} />
-    <meta property="fc:frame:button:4" content=${answerOptions[id - 1][3]} />
-    <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    <meta property="fc:frame:post_url" content="${
-      process.env.NEXT_PUBLIC_URL
-    }/api/frame?id=${nextId}" />
-  </head></html>`);
+    return new NextResponse(
+      getFrameHtmlResponse({
+        image: {
+          src: `${process.env.NEXT_PUBLIC_URL}/${id}.png`,
+          aspectRatio: "1.91:1",
+        },
+        ogTitle: `This is frame ${id}`,
+        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=${nextId}`,
+        buttons: [
+          {
+            label: `${answerOptions[id - 1][0]}`,
+            action: "post",
+          },
+          {
+            label: `${answerOptions[id - 1][1]}`,
+            action: "post",
+          },
+          {
+            label: `${answerOptions[id - 1][2]}`,
+            action: "post",
+          },
+          {
+            label: `${answerOptions[id - 1][3]}`,
+            action: "post",
+          },
+        ],
+      })
+    );
   }
 }
 
