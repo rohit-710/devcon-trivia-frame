@@ -57,17 +57,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const correctAnswers = [0, 1, 2, 1, 2, 3, 1, 1];
 
   // Check if the answer is incorrect
-  if (id > 1 && buttonId !== correctAnswers[id - 2]) {
+  if (id >= 1 && buttonId !== correctAnswers[id - 1]) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <title>Wrong! Try again.</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong${
-      id - 1
-    }.png" />
+    <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/wrong${id}.png" />
     <meta property="fc:frame:button:1" content="Try again"} />
-    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${
-      id - 1
-    }&action=showQuestion" />
+    <meta property="fc:frame:post_url" content="${NEXT_PUBLIC_URL}/api/frame?id=${id}&action=showQuestion" />
     <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
   </head></html>`);
   }
