@@ -45,9 +45,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content="${NEXT_PUBLIC_URL}/correct.png" />
         <meta property="fc:frame:button:1" content="Next question"} />
-        <meta property="fc:frame:post_url" content="${
-          process.env.NEXT_PUBLIC_URL
-        }/api/frame?id=${nextId - 1}" />
+        <meta property="fc:frame:post_url" content="${process.env.NEXT_PUBLIC_URL}/api/frame?id=${nextId}" />
         <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
         </head>
         </html>`);
@@ -89,7 +87,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
         <meta property="fc:frame:post_url" content="${
           process.env.NEXT_PUBLIC_URL
-        }/api/frame?id=${nextId - 1}" />
+        }/api/frame?id=${nextId}" />
         </head>
         </html>`);
   }
