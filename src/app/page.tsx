@@ -20,6 +20,7 @@ const frameMetadata = getFrameMetadata({
     src: `${NEXT_PUBLIC_URL}/default.png`,
     aspectRatio: "1.91:1",
   },
+  post_url: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
 });
 
 export const metadata: Metadata = {
