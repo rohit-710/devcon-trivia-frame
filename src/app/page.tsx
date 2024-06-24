@@ -20,11 +20,6 @@ const frameMetadata = getFrameMetadata({
       action: "link",
       target: "https://warpcast.com/devcon",
     },
-    {
-      label: "Devcon Channel",
-      action: "link",
-      target: "https://warpcast.com/~/channel/devcon",
-    },
   ],
   image: {
     src: `${NEXT_PUBLIC_URL}/default.png`,
