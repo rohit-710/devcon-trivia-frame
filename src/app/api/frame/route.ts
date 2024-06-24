@@ -35,10 +35,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           aspectRatio: "1.91:1",
         },
         ogTitle: "Wrong! Try again.",
-        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=${id}`, // Same id for retry
+        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
         buttons: [
           {
-            label: "Retry",
+            label: "Play again",
             action: "post",
           },
         ],
@@ -66,6 +66,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             action: "link",
             target: "https://warpcast.com/rosee",
           },
+
           {
             label: "Devcon Channel",
             action: "link",
