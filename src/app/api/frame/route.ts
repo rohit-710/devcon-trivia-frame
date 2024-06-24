@@ -66,6 +66,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             action: "link",
             target: "https://warpcast.com/rosee",
           },
+          {
+            label: "Follow Devcon",
+            action: "link",
+            target: "https://warpcast.com/devcon",
+          },
+          {
+            label: "Devcon Channel",
+            action: "link",
+            target: "https://warpcast.com/~/channel/devcon",
+          },
         ],
       })
     );
