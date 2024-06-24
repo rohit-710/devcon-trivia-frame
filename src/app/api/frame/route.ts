@@ -7,6 +7,7 @@ import {
 const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
 
 let retryingQuestionId: number | null = null; // Stores the ID of the question being retried (can be null)
+let retryCount: number = 0; // Tracks the number of retries for the current question
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const searchParams = req.nextUrl.searchParams;
@@ -33,16 +34,26 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const isRetrying = retryingQuestionId !== null && retryingQuestionId === id;
 
   if (isRetrying) {
-    retryingQuestionId = null; // Clear retry state after handling
-  } else if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
-    retryingQuestionId = id; // Set retry state for next request
+    retryCount++; // Increment retry count
+  } else {
+    retryingQuestionId = id; // Set retry state for first attempt on a question
+    retryCount = 0; // Reset retry count for new question
+  }
+
+  // Determine if user answered correctly (consider retries)
+  const answeredCorrectly =
+    buttonId - 1 === correctAnswers[id - 2] || retryCount >= 2;
+
+  if (answeredCorrectly) {
+    retryingQuestionId = null; // Clear retry state after correct answer
+    retryCount = 0; // Reset retry count after correct answer
   }
 
   // Ensure image for first question is displayed for initial render and retry
   const selectedImageId = isRetrying && id === 1 ? 1 : id; // Use 1 for first question retry
 
-  // Show appropriate content based on question and retry state
-  if (id === 9) {
+  // Show appropriate content based on question, retry state, and answer
+  if (id === 9 || answeredCorrectly) {
     return new NextResponse(
       getFrameHtmlResponse({
         image: {
