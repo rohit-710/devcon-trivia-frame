@@ -12,7 +12,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const searchParams = req.nextUrl.searchParams;
   const idString: any = searchParams.get("id");
   const id = parseInt(idString);
-  const nextId = id + 1;
+
   const data = await req.json();
   const buttonId = data.untrustedData.buttonIndex;
 
@@ -36,26 +36,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     retryingQuestionId = null; // Clear retry state after handling
   } else if (id > 1 && buttonId - 1 !== correctAnswers[id - 2]) {
     retryingQuestionId = id; // Set retry state for next request
-
-    // Show retry screen with the same question
-    return new NextResponse(
-      getFrameHtmlResponse({
-        image: {
-          src: `${process.env.NEXT_PUBLIC_URL}/wrong${id - 1}.png`,
-          aspectRatio: "1.91:1",
-        },
-        ogTitle: "Wrong! Try again.",
-        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=${id}`, // Same id for retry
-        buttons: [
-          {
-            label: "Retry",
-            action: "post",
-          },
-        ],
-      })
-    );
   }
 
+  // Ensure image for first question is displayed for initial render and retry
+  const selectedImageId = isRetrying && id === 1 ? 1 : id; // Use 1 for first question retry
+
+  // Show appropriate content based on question and retry state
   if (id === 9) {
     return new NextResponse(
       getFrameHtmlResponse({
@@ -66,6 +52,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         ogTitle: "You won",
         postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
         buttons: [
+          // Replace with your actual buttons
           {
             label: "Follow Rohit",
             action: "link",
@@ -76,7 +63,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             action: "link",
             target: "https://warpcast.com/rosee",
           },
-
           {
             label: "Devcon Channel",
             action: "link",
@@ -86,32 +72,30 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       })
     );
   } else {
-    // Proceed to next question if answered correctly or after retry
     return new NextResponse(
       getFrameHtmlResponse({
         image: {
-          src: `${process.env.NEXT_PUBLIC_URL}/${isRetrying ? id : id + 1}.png`,
+          src: `<span class="math-inline">\{process\.env\.NEXT\_PUBLIC\_URL\}/</span>{selectedImageId}.png`,
           aspectRatio: "1.91:1",
         },
-        ogTitle: `This is frame ${isRetrying ? id : id + 1}`,
-        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=${
-          isRetrying ? id : id + 1
-        }`,
+        ogTitle: `This is frame ${id}`,
+        postUrl: `<span class="math-inline">\{process\.env\.NEXT\_PUBLIC\_URL\}/api/frame?id\=</span>{id === 9 ? 1 : id + 1}`,
         buttons: [
+          // Replace with your actual buttons (answer options)
           {
-            label: `${answerOptions[id - 1][0]}`,
+            label: `${answerOptions[selectedImageId - 1][0]}`, // Use selectedImageId for answer options
             action: "post",
           },
           {
-            label: `${answerOptions[id - 1][1]}`,
+            label: `${answerOptions[selectedImageId - 1][1]}`,
             action: "post",
           },
           {
-            label: `${answerOptions[id - 1][2]}`,
+            label: `${answerOptions[selectedImageId - 1][2]}`,
             action: "post",
           },
           {
-            label: `${answerOptions[id - 1][3]}`,
+            label: `${answerOptions[selectedImageId - 1][3]}`,
             action: "post",
           },
         ],
