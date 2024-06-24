@@ -35,10 +35,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           aspectRatio: "1.91:1",
         },
         ogTitle: "Wrong! Try again.",
-        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=1`,
+        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame?id=${id}`, // Same id for retry
         buttons: [
           {
-            label: "Play again",
+            label: "Retry",
             action: "post",
           },
         ],
