@@ -75,11 +75,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     return new NextResponse(
       getFrameHtmlResponse({
         image: {
-          src: `<span class="math-inline">\{process\.env\.NEXT\_PUBLIC\_URL\}/</span>{selectedImageId}.png`,
+          src: `${NEXT_PUBLIC_URL}/${selectedImageId}.png`,
           aspectRatio: "1.91:1",
         },
         ogTitle: `This is frame ${id}`,
-        postUrl: `<span class="math-inline">\{process\.env\.NEXT\_PUBLIC\_URL\}/api/frame?id\=</span>{id === 9 ? 1 : id + 1}`,
+        postUrl: `${NEXT_PUBLIC_URL}/api/frame?id=${id === 9 ? 1 : id + 1}`,
         buttons: [
           // Replace with your actual buttons (answer options)
           {
