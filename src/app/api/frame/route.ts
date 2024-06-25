@@ -53,7 +53,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const selectedImageId = isRetrying && id === 1 ? 1 : id; // Use 1 for first question retry
 
   // Show appropriate content based on question, retry state, and answer
-  if (id === 9 || answeredCorrectly) {
+  if (id === 9 || (answeredCorrectly && id > 1)) {
+    // Check for answered correctly and avoid early jump
     return new NextResponse(
       getFrameHtmlResponse({
         image: {
